@@ -1,0 +1,18 @@
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: cars-service
+          uri: http://localhost:8082  # Replace with the URL of your cars-service
+          predicates:
+            - Path=/cars/**
+        - id: client-service
+          uri: http://localhost:8081  # Replace with the URL of your client-service
+          predicates:
+            - Path=/clients/**
+  application:
+    name: api-gateway
+server:
+  port: 8086
+
