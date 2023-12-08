@@ -3,11 +3,11 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: cars-service
+        - id: CARS-SERVICE
           uri: http://localhost:8082  # Replace with the URL of your cars-service
           predicates:
             - Path=/cars/**
-        - id: client-service
+        - id: CLIENT-SERVICE
           uri: http://localhost:8081  # Replace with the URL of your client-service
           predicates:
             - Path=/clients/**

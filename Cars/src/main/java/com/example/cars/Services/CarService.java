@@ -38,15 +38,8 @@ public class CarService {
         carRepository.deleteById(id);
     }
     public List<Car> findByClient(Long clientId){
-        return cars.stream().filter(car -> car.getClientId().equals(clientId)).toList();
+        return carRepository.findByClientId(clientId);
     }
-    @PersistenceContext
-    private EntityManager entityManager;
 
-    public List<Car> findByClientFromDifferentDB(Long clientId) {
-        Query query = entityManager.createNativeQuery("SELECT * FROM cardb.cars WHERE client_id = :clientId", Car.class);
-        query.setParameter("clientId", clientId);
-        return query.getResultList();
-    }
 
 }
