@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  eureka-server:
+    build: ./Eureka_Server
+    ports:
+      - "8761:8761"
+    # Add additional configuration as needed
+
+  cars-service:
+    build: ./Cars
+    ports:
+      - "8082:8082"
+    # Add additional configuration as needed
+
+  client-service:
+    build: ./Client
+    ports:
+      - "8081:8081"
+    # Add additional configuration as needed
+
+  api-gateway:
+    build: ./API_Gateway
+    ports:
+      - "8086:8086"
+    # Add additional configuration as needed
