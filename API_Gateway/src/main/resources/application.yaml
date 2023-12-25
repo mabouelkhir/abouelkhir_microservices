@@ -1,22 +1,12 @@
-
 spring:
   cloud:
     gateway:
       routes:
-        - id: CARS-SERVICE
-          uri: lb://CARS-SERVICE:8082  # Replace with the URL of your cars-service
-          predicates:
-            - Path=/cars/**
-        - id: CLIENT-SERVICE
-          uri: lb://CLIENT-SERVICE:8081  # Replace with the URL of your client-service
+        - id: r1
+          uri: http://localhost:8081/
           predicates:
             - Path=/clients/**
-    discovery:
-      enabled: true
-  application:
-    name: api-gateway
-server:
-  port: 8086
-eureka:
-  instance:
-    hostname: localhost
+        - id: r2
+          uri: http://localhost:8082/
+          predicates:
+            - Path=/cars/**
