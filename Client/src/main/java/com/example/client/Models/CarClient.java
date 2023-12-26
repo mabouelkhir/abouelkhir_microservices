@@ -13,5 +13,7 @@ import java.util.List;
 public interface CarClient {
     @GetMapping("/cars/Client/{clientId}")
     public List<Car> findByClient(@PathVariable("clientId") Long clientId);
+    @GetMapping("/cars")
+    public String getAllCars();
 
 }

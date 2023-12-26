@@ -1,8 +1,13 @@
 package com.example.client.Controllers;
 
+import com.example.client.Models.Car;
 import com.example.client.Models.CarClient;
 import com.example.client.Models.Client;
 import com.example.client.Services.ClientService;
+import com.example.client.Services.QueueListener;
+import com.example.client.Services.SharedDataService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +20,13 @@ import java.util.List;
 public class ClientController {
 
     private final ClientService clientService;
+    private final SharedDataService sharedDataService;
+
 
     @Autowired
-    public ClientController(ClientService clientService) {
+    public ClientController(ClientService clientService, SharedDataService sharedDataService) {
         this.clientService = clientService;
+        this.sharedDataService = sharedDataService;
     }
 
     @Autowired
@@ -53,4 +61,33 @@ public class ClientController {
                 client.setCars(carClient.findByClient(client.getId())));
         return clients;
     }
+
+    @GetMapping("/with-cars2")
+    public List<Client> findAllWithCars2() {
+        carClient.getAllCars();
+        List<Client> clients = clientService.getAllClients();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            String carsJson = sharedDataService.getCarsJson();
+            if (carsJson != null) {
+                List<Car> carsList = objectMapper.readValue(carsJson, new TypeReference<List<Car>>() {});
+
+                for (Client client : clients) {
+                    Long clientId = client.getId();
+                    List<Car> clientCars = carsList.stream()
+                            .filter(car -> car.getClientId().equals(clientId))
+                            .toList();
+
+                    client.setCars(clientCars);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return clients;
+    }
+
+
 }

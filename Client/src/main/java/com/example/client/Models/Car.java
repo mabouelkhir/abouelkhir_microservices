@@ -10,8 +10,19 @@ public class Car {
     Long id;
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id22")
     private Client client;
+
+    private Long clientId;
+
+    public Long getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
+    }
+
     String marque;
     String model;
 

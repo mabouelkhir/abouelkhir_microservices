@@ -1,7 +1,9 @@
 package com.example.cars.Controllers;
 
+import com.example.cars.Config.RabbitMqConfig;
 import com.example.cars.Models.Car;
 import com.example.cars.Services.CarService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +18,19 @@ public class CarController {
     private final CarService carService;
 
     @Autowired
+    RabbitTemplate template;
+
+
+    @Autowired
     public CarController(CarService carService) {
         this.carService = carService;
     }
 
     @GetMapping
-    public List<Car> getAllCars() {
-        return carService.getAllCars();
+    public String getAllCars() {
+        List<Car> cars= carService.getAllCars();
+        template.convertAndSend(RabbitMqConfig.EXCHANGE,RabbitMqConfig.ROUTING_KEY,cars);
+        return "Success";
     }
 
     @GetMapping("/{id}")
